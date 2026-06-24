@@ -1,3 +1,10 @@
 fastapi
 uvicorn[standard]
 python-dotenv
+pydantic-settings
+websockets
+python-multipart
+pillow
+numpy
+mediapipe
+opencv-contrib-python

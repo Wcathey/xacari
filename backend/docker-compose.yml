@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: xacari-api
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_NAME=${APP_NAME:-Xacari Workout Coach API}
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+      - DEBUG=${DEBUG:-True}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app/app
+      - ./logs:/app/logs
+    restart: unless-stopped
+    networks:
+      - xacari-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  xacari-network:
+    driver: bridge
+
+volumes:
+  logs:
